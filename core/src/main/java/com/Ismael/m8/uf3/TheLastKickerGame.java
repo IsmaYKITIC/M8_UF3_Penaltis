@@ -1,5 +1,7 @@
 package com.Ismael.m8.uf3;
 
+import com.Ismael.m8.uf3.helpers.AssetManager;
+import com.Ismael.m8.uf3.screens.InitialScreen;
 import com.Ismael.m8.uf3.screens.MainScreen;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
@@ -12,12 +14,12 @@ import com.badlogic.gdx.utils.ScreenUtils;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class TheLastKickerGame extends Game {
     private SpriteBatch batch;
-    private Texture image;
 
     @Override
     public void create () {
+        AssetManager.load();
         batch = new SpriteBatch();
-        setScreen(new MainScreen(this));
+        setScreen(new InitialScreen(this));
     }
 
     public SpriteBatch getBatch() {
