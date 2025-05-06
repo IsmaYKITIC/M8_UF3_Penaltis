@@ -57,6 +57,9 @@ public class InitialScreen implements Screen {
         batch.draw(ball, 0, 500, 150, 150);
         batch.draw(ball, 500, 500, 150, 150);
         batch.draw(ball, 0, 100, 150, 150);
+        batch.draw(ball, 400, 0, 150, 150);
+        batch.draw(ball, 900, 600, 150, 150);
+
 
         AssetManager.font2.draw(batch, "\nFes clic per començar!", 650, 150);
         batch.end();

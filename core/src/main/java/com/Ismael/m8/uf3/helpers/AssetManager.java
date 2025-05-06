@@ -39,7 +39,7 @@ public class AssetManager {
         font2 = new BitmapFont(Gdx.files.internal("Fonts/subtitle.fnt"));
 
         // Imatges
-        ball = new Texture(Gdx.files.internal("Sprites/ball.png"));
+        ball = new Texture(Gdx.files.internal("Sprites/ballpix.png"));
        // goalKeeper = new Texture(Gdx.files.internal("Sprites/keeper.png"));
 
         // Sons
