@@ -1,6 +1,6 @@
 package com.Ismael.m8.uf3.screens;
 
-import static com.Ismael.m8.uf3.helpers.AssetManager.goal;
+
 import static com.Ismael.m8.uf3.helpers.AssetManager.music;
 import static com.Ismael.m8.uf3.helpers.AssetManager.soundStadium;
 
@@ -8,17 +8,19 @@ import com.Ismael.m8.uf3.TheLastKickerGame;
 import com.Ismael.m8.uf3.actors.Ball;
 import com.Ismael.m8.uf3.actors.Banner;
 import com.Ismael.m8.uf3.actors.Goal;
+import com.Ismael.m8.uf3.actors.Goalkeeper;
 import com.Ismael.m8.uf3.helpers.AssetManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.graphics.Texture;
-
 public class MainScreen implements Screen, InputProcessor {
 
     private TheLastKickerGame game;
@@ -26,12 +28,19 @@ public class MainScreen implements Screen, InputProcessor {
     private SpriteBatch batch;
     private Goal goal;
     private Ball ball;
+    private Goalkeeper goalkeeper;
     private Banner banner;
     private  Music backgroundMusic;
 
+    // Ajustar la posición de la pelota al centro de la pantalla
+    private float screenWidth = Gdx.graphics.getWidth();
+    private float screenHeight = Gdx.graphics.getHeight();
     public MainScreen(TheLastKickerGame game) {
         this.game = game;
     }
+
+    //Marcador
+    //TODO: Crear marcador
 
     @Override
     public void show() {
@@ -46,29 +55,50 @@ public class MainScreen implements Screen, InputProcessor {
         // Establecer el procesador de entradas para escuchar los toques
         Gdx.input.setInputProcessor(this);
 
-        // Crear la pelota y añadirla al stage
-        Texture ballTexture1 = new Texture("Sprites/Balls/ballpix.png");
-        Texture ballTexture2 = new Texture("Sprites/Balls/ballpix2.png");
-        ball = new Ball(ballTexture1, ballTexture2);
-
         // Crear y añadir el Banner
         banner = new Banner(AssetManager.banner, 100); // velocidad 100 px/s
         banner.setPosition(0, 460); // posición inferior, puedes ajustar la Y
         stage.addActor(banner);
 
-        // Ajustar la posición de la pelota al centro de la pantalla
-        float screenWidth = Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();
-        ball.setPosition(screenWidth / 2 - ball.getWidth() / 2, screenHeight / 2 - ball.getHeight() / 2);
+        // Crear la pelota y añadirla al stage
+        Texture ballTexture1 = new Texture("Sprites/Balls/ballpix.png");
+        Texture ballTexture2 = new Texture("Sprites/Balls/ballpix2.png");
+        ball = new Ball(ballTexture1, ballTexture2);
+        ball.setSize(ball.getWidth() * 0.5f, ball.getHeight() * 0.5f);
+        ball.setPosition(screenWidth / 2 - ball.getWidth() / 2, 0);
         // Añadir la pelota al stage
         stage.addActor(ball);
 
         // Crear la portería usando la textura cargada en AssetManager
-        goal = new Goal(AssetManager.goal);
-        // Colocar la portería en una posición específica, por ejemplo en el centro
-        goal.setPosition(0, 200);
+        Texture goalTexture = new Texture("Sprites/porteria.png");
+        goal = new Goal(goalTexture);
+        // Aumentar el tamaño de la portería
+        goal.setSize(goal.getWidth() * 2.5f, goal.getHeight() * 2.5f);
+        // Colocar la portería en el centro de la pantalla
+        goal.setPosition(screenWidth / 2 - goal.getWidth() / 2,175);
         // Añadir la portería al stage
         stage.addActor(goal);
+
+
+        // Crear animación de preparación usando la cargada en AssetManager
+        Animation<TextureRegion> prepareAnim = AssetManager.goalkeeperPrepareAnimation;
+
+    // Crear el portero con esa animación
+        goalkeeper = new Goalkeeper(
+            prepareAnim,
+            AssetManager.goalkeeperDiveLeft,
+            AssetManager.goalkeeperDiveRight
+        );
+
+    // Aumentamos su tamaño
+        goalkeeper.setSize(goalkeeper.getWidth()*0.5f , goalkeeper.getHeight()*0.5f );
+
+    // Posicionamos al portero en la pantalla (ajusta la X e Y según quieras)
+        goalkeeper.setPosition(screenWidth / 2 - goalkeeper.getWidth() / 2, 80);
+        // Añadir el portero al stage
+        stage.addActor(goalkeeper);
+
+
 
     }
 
@@ -81,8 +111,6 @@ public class MainScreen implements Screen, InputProcessor {
         batch.begin();
 
         // Dibujar el fondo a tamaño de pantalla completa
-        int screenWidth = Gdx.graphics.getWidth();
-        int screenHeight = Gdx.graphics.getHeight();
         batch.draw(AssetManager.backGroundGame, 0, 0, screenWidth, screenHeight);
 
         batch.end();

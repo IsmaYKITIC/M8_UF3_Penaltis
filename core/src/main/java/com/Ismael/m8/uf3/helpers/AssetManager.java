@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.Array;
 
 public class AssetManager {
 
@@ -22,9 +24,15 @@ public class AssetManager {
 
     // Actors
     public static Texture ball;
-    public static Texture goalKeeper;;
+    public static Texture goalKeeper;
     public static Texture goal;
     public static Texture banner;
+
+    //Animations
+    public static Animation<TextureRegion> goalkeeperPrepareAnimation;
+    public static TextureRegion goalkeeperDiveLeft;
+    public static TextureRegion goalkeeperDiveRight;
+
     // Sons
     public static Music music;
     public static Sound soGol;
@@ -49,6 +57,22 @@ public class AssetManager {
        // goalKeeper = new Texture(Gdx.files.internal("Sprites/keeper.png"));
         banner = new Texture(Gdx.files.internal("Sprites/publicidad.png"));
 
+        //animacions
+        // Cargar texturas individuales
+        TextureRegion frame1 = new TextureRegion(new Texture("Sprites/GK/1.png"));
+        TextureRegion frame2 = new TextureRegion(new Texture("Sprites/GK/2.png"));
+        TextureRegion frame3 = new TextureRegion(new Texture("Sprites/GK/3.png"));
+        TextureRegion frame4 = new TextureRegion(new Texture("Sprites/GK/4.png"));
+
+        // Crear la animación
+        Array<TextureRegion> frames = new Array<>();
+        frames.add(frame1);
+        frames.add(frame2);
+        frames.add(frame3);
+        frames.add(frame4);
+
+        goalkeeperPrepareAnimation = new Animation<>(0.3f, frames, Animation.PlayMode.NORMAL);
+
         // Sons
         music = Gdx.audio.newMusic(Gdx.files.internal("Sounds/musicainit.mp3"));
         music.setLooping(true);
@@ -59,6 +83,8 @@ public class AssetManager {
         soundStadium= Gdx.audio.newMusic(Gdx.files.internal("Sounds/stadium.mp3"));
         music.setLooping(true);
         music.setVolume(0.8f);
+
+
     }
 
 }
