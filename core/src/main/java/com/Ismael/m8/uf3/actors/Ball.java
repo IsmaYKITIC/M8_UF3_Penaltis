@@ -8,7 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Ball extends Actor {
-
     private TextureRegion[] frames;
     private int currentFrame = 0;
     private float frameDuration = 0.03f;
@@ -18,6 +17,7 @@ public class Ball extends Actor {
     private boolean animating = false;
     private boolean moveStarted = false;
     private float totalDistance;
+    private float initialX, initialY;
 
     public Ball(Texture texture1, Texture texture2) {
         this.frames = new TextureRegion[]{
@@ -27,6 +27,12 @@ public class Ball extends Actor {
 
         setSize(frames[0].getRegionWidth(), frames[0].getRegionHeight());
         setOrigin(getWidth() / 2f, getHeight() / 2f);
+    }
+
+    public void setInitialPosition(float x, float y) {
+        this.initialX = x;
+        this.initialY = y;
+        setPosition(x, y);
     }
 
     @Override
@@ -40,14 +46,11 @@ public class Ball extends Actor {
                 stateTime = 0f;
             }
 
-            // Movimiento hacia el destino
             Vector2 currentPosition = new Vector2(getX(), getY());
             Vector2 direction = destination.cpy().sub(currentPosition);
             float distance = direction.len();
-
-            // Escalado dinámico basado en la distancia restante
             float progress = MathUtils.clamp(1f - (distance / totalDistance), 0f, 1f);
-            scale = 1f - progress * 0.5f; // Escala entre 1.0 y 0.5
+            scale = 1f - progress * 0.5f;
             setScale(scale);
 
             if (distance > 1f) {
@@ -57,7 +60,7 @@ public class Ball extends Actor {
                 setPosition(destination.x, destination.y);
                 animating = false;
                 moveStarted = false;
-                setScale(0.5f); // Asegurar escala final mínima
+                setScale(1f);
             }
         }
     }
@@ -75,21 +78,13 @@ public class Ball extends Actor {
         );
     }
 
-    public void startAnimation() {
-        this.animating = true;
-        this.stateTime = 0f;
-        this.currentFrame = 0;
-        this.moveStarted = true;
-        this.scale = 1f; // Restaurar escala original
-        setScale(scale);
-    }
-
     public void setDestination(Vector2 destination) {
         this.destination.set(destination);
-        this.totalDistance = destination.cpy().sub(getX(), getY()).len(); // Calcular distancia total
+        this.totalDistance = destination.cpy().sub(getX(), getY()).len();
         this.animating = true;
         this.moveStarted = true;
-        this.scale = 1f; // Restaurar escala al iniciar nuevo movimiento
+        this.stateTime = 0f;
+        this.scale = 1f;
         setScale(scale);
     }
 

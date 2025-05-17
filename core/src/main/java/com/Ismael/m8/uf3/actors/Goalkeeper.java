@@ -6,31 +6,51 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Goalkeeper extends Actor {
-
     public enum State {
         PREPARING,
         READY,
-        DIVING_LEFT,
-        DIVING_RIGHT
+        DIVING
     }
 
     private State state = State.PREPARING;
-
     private final Animation<TextureRegion> prepareAnimation;
-    private final TextureRegion diveLeft;
-    private final TextureRegion diveRight;
-
-    private float stateTime = 0f;
     private TextureRegion currentFrame;
+    private float stateTime = 0f;
 
-    public Goalkeeper(Animation<TextureRegion> prepareAnim, TextureRegion diveLeft, TextureRegion diveRight) {
+    private final TextureRegion leftUp, leftDown, rightUp, rightDown;
+
+    // Guardamos la posición original para volver tras un chute
+    private float initialX, initialY;
+
+    public Goalkeeper(
+        Animation<TextureRegion> prepareAnim,
+        TextureRegion leftUp,
+        TextureRegion leftDown,
+        TextureRegion rightUp,
+        TextureRegion rightDown
+    ) {
         this.prepareAnimation = prepareAnim;
-        this.diveLeft = diveLeft;
-        this.diveRight = diveRight;
+        this.leftUp = leftUp;
+        this.leftDown = leftDown;
+        this.rightUp = rightUp;
+        this.rightDown = rightDown;
 
-        // Usar el primer frame para establecer el tamaño inicial del actor
-        this.currentFrame = prepareAnim.getKeyFrame(0); // <-- esto inicializa el frame visible
-        setSize(currentFrame.getRegionWidth(), currentFrame.getRegionHeight()); // <-- tamaño base
+        this.currentFrame = prepareAnim.getKeyFrame(0);
+        setSize(currentFrame.getRegionWidth(), currentFrame.getRegionHeight());
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        super.setPosition(x, y);
+        this.initialX = x;
+        this.initialY = y;
+    }
+    public void prepare() {
+        setState(State.PREPARING);
+    }
+
+    private void setState(State state) {
+        this.state = state;
     }
 
     @Override
@@ -43,23 +63,18 @@ public class Goalkeeper extends Actor {
                 currentFrame = prepareAnimation.getKeyFrame(stateTime, false);
                 if (prepareAnimation.isAnimationFinished(stateTime)) {
                     state = State.READY;
+                    // Guardamos explícitamente el último frame para que se mantenga fijo
+                    currentFrame = prepareAnimation.getKeyFrame(prepareAnimation.getAnimationDuration(), false);
                 }
                 break;
 
             case READY:
-                // Mantener el último frame de preparación
-                currentFrame = (TextureRegion) prepareAnimation.getKeyFrame(prepareAnimation.getAnimationDuration());
-
+                // No cambiar currentFrame, para mantener el último frame de la animación
                 break;
 
-            case DIVING_LEFT:
-                /*currentFrame = diveLeft;
-                moveBy(-5, 0); // TODO: mejorar movimiento*/
-                break;
-
-            case DIVING_RIGHT:
-               /* currentFrame = diveRight;
-                moveBy(5, 0); // TODO: mejorar movimiento*/
+            case DIVING:
+                // Aquí ya asignaste currentFrame en decideDirection()
+                // Puedes agregar lógica extra aquí si quieres
                 break;
         }
     }
@@ -71,18 +86,32 @@ public class Goalkeeper extends Actor {
         }
     }
 
-    // Métodos públicos para controlar el estado del portero
-    public void diveLeft() {
-        state = State.DIVING_LEFT;
+    public void decideDirection() {
+        boolean isLeft = Math.random() < 0.5;
+        boolean isUp = Math.random() < 0.5;
+
+        if (isLeft && isUp) {
+            currentFrame = leftUp;
+            moveBy(-50, 30);
+        } else if (isLeft && !isUp) {
+            currentFrame = leftDown;
+            moveBy(-50, -30);
+        } else if (!isLeft && isUp) {
+            currentFrame = rightUp;
+            moveBy(50, 30);
+        } else {
+            currentFrame = rightDown;
+            moveBy(50, -30);
+        }
+
+        // ESCALA corregida en estado DIVING
+        setSize(currentFrame.getRegionWidth() * 0.5f, currentFrame.getRegionHeight() * 0.5f);
+        state = State.DIVING;
     }
 
-    public void diveRight() {
-        state = State.DIVING_RIGHT;
-    }
-
-    public void reset() {
-        state = State.PREPARING;
-        stateTime = 0f;
+    public void resetposition() {
+        // Volver a la posición original
+        setPosition(initialX, initialY);
     }
 
     public State getState() {

@@ -38,6 +38,11 @@ public class AssetManager {
     public static Sound soGol;
     public static Sound soFail;
     public static Music soundStadium;
+    public static Sound whistle;
+    public static TextureRegion gkLeftUp, gkLeftDown, gkRightUp, gkRightDown;
+    public static Sound kick;
+    public static Music goalSound;
+
 
     public static void load() {
         // Background
@@ -54,10 +59,25 @@ public class AssetManager {
         // Imatges
         ball = new Texture(Gdx.files.internal("Sprites/Balls/ballpix.png"));
         goal =  new Texture(Gdx.files.internal("Sprites/porteria.png"));
+        //Porteros
        // goalKeeper = new Texture(Gdx.files.internal("Sprites/keeper.png"));
+        gkLeftUp = new TextureRegion(new Texture("Sprites/GK/5lu.png"));
+        gkLeftDown = new TextureRegion(new Texture("Sprites/GK/5ld.png"));
+        gkRightUp = new TextureRegion(new Texture("Sprites/GK/5ru.png"));
+        gkRightDown = new TextureRegion(new Texture("Sprites/GK/5rd.png"));
+
+
         banner = new Texture(Gdx.files.internal("Sprites/publicidad.png"));
 
+
         //animacions
+        //Porteros
+        // goalKeeper = new Texture(Gdx.files.internal("Sprites/keeper.png"));
+        gkLeftUp = new TextureRegion(new Texture("Sprites/GK/5lu.png"));
+        gkLeftDown = new TextureRegion(new Texture("Sprites/GK/5ld.png"));
+        gkRightUp = new TextureRegion(new Texture("Sprites/GK/5ru.png"));
+        gkRightDown = new TextureRegion(new Texture("Sprites/GK/5rd.png"));
+
         // Cargar texturas individuales
         TextureRegion frame1 = new TextureRegion(new Texture("Sprites/GK/1.png"));
         TextureRegion frame2 = new TextureRegion(new Texture("Sprites/GK/2.png"));
@@ -77,6 +97,12 @@ public class AssetManager {
         music = Gdx.audio.newMusic(Gdx.files.internal("Sounds/musicainit.mp3"));
         music.setLooping(true);
         music.setVolume(0.9f);
+        whistle = Gdx.audio.newSound(Gdx.files.internal("Sounds/silvato.mp3"));
+        kick = Gdx.audio.newSound(Gdx.files.internal("Sounds/chute.mp3"));
+        goalSound = Gdx.audio.newMusic(Gdx.files.internal("Sounds/gol.mp3"));
+        goalSound.setVolume(2f);
+
+
 
         /*soGol = Gdx.audio.newSound(Gdx.files.internal("sons/gota.wav"));
         soFail = Gdx.audio.newSound(Gdx.files.internal("sons/gota.wav"));*/

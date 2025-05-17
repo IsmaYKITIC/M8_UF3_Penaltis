@@ -105,9 +105,9 @@ public class InitialScreen implements Screen {
         batch.draw(ball, 900, 600, 150, 150);
 
         //Aplicar el parpadeo al texto
-        AssetManager.font2.setColor(1, 1, 1, blinkAlpha); // Blanco con alpha dinámico
+        AssetManager.font2.setColor(1, 1, 1, blinkAlpha);
         AssetManager.font2.draw(batch, "\nFes clic per començar!", 650, 150);
-        AssetManager.font2.setColor(1, 1, 1, 1f); // Restaurar color a opaco total
+        AssetManager.font2.setColor(1, 1, 1, 1f);
 
         batch.end();
     }
