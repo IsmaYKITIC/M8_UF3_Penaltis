@@ -168,7 +168,6 @@ public class MainScreen implements Screen, InputProcessor {
             float paddingX = 40f;
             float paddingY = 30f;
 
-            // Dibuja fondo translúcido con ShapeRenderer
             Gdx.gl.glEnable(GL20.GL_BLEND);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(0, 0, 0, 0.6f); // Negro con transparencia
@@ -232,6 +231,8 @@ public class MainScreen implements Screen, InputProcessor {
         }
         return false;
     }
+
+
 
     @Override public boolean keyDown(int keycode) { return false; }
     @Override public boolean keyUp(int keycode) { return false; }
